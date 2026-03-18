@@ -73,17 +73,17 @@ add_action( 'template_redirect', 'ene_elite_load_app_shell' );
 function ene_elite_load_app_shell() {
     $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile', 'login' ];
     
-    if ( is_page( $dashboard_pages ) ) {
+    if ( is_page( $dashboard_pages ) || is_front_page() ) {
         
         // Auth check: If attempting to access dashboard pages while logged out, redirect to login
         if ( ! is_user_logged_in() && ! is_page( 'login' ) ) {
-            wp_safe_redirect( get_permalink( get_page_by_path( 'login' ) ) );
+            wp_safe_redirect( get_permalink( get_page_by_path( 'login' ) ) ?: home_url('/?pagename=login') );
             exit;
         }
 
         // Auth check: If accessing login while ALREADY logged in, redirect to dashboard
         if ( is_user_logged_in() && is_page( 'login' ) ) {
-            wp_safe_redirect( get_permalink( get_page_by_path( 'dashboard' ) ) );
+            wp_safe_redirect( home_url( '/' ) );
             exit;
         }
 
@@ -118,7 +118,7 @@ function ene_elite_admin_menu_redirect() {
 add_action( 'wp_enqueue_scripts', 'ene_elite_enqueue_assets' );
 function ene_elite_enqueue_assets() {
     $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile', 'login' ];
-    if ( is_page( $dashboard_pages ) ) {
+    if ( is_page( $dashboard_pages ) || is_front_page() ) {
         wp_enqueue_style( 'ene-elite-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap', array(), null );
         wp_enqueue_style( 'ene-elite-style', EDUNEXUS_ELITE_URL . 'assets/css/style.css', array(), EDUNEXUS_ELITE_VERSION );
         wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '4.0', true );
@@ -127,7 +127,7 @@ function ene_elite_enqueue_assets() {
         wp_localize_script( 'ene-elite-script', 'eneEliteSettings', array(
             'ajaxurl'   => admin_url( 'admin-ajax.php' ),
             'nonce'     => wp_create_nonce( 'ene_elite_ajax_nonce' ),
-            'dashboard' => get_permalink( get_page_by_path( 'dashboard' ) )
+            'dashboard' => home_url( '/' )
         ) );
     }
 }

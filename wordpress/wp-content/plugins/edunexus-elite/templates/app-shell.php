@@ -11,7 +11,7 @@ function ene_get_page_url($slug) {
     return $page ? get_permalink($page) : home_url('/?pagename=' . $slug);
 }
 
-$dashboard_url  = ene_get_page_url('dashboard');
+$dashboard_url  = home_url('/'); // Always root for the main dashboard
 $profile_url    = ene_get_page_url('profile');
 $attendance_url = ene_get_page_url('attendance');
 $results_url    = ene_get_page_url('results');
@@ -67,7 +67,7 @@ $fees_url       = ene_get_page_url('fees');
             
             <nav class="ene-nav">
                 <ul>
-                    <li><a href="<?php echo esc_url($dashboard_url); ?>" class="<?php echo is_page('dashboard') ? 'active' : ''; ?>">
+                    <li><a href="<?php echo esc_url($dashboard_url); ?>" class="<?php echo (is_front_page() || is_page('dashboard')) ? 'active' : ''; ?>">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         Dashboard
                     </a></li>
