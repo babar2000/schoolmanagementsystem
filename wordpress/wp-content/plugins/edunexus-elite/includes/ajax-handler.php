@@ -16,6 +16,33 @@ function ene_elite_verify_ajax() {
 }
 
 /**
+ * Handle Login Submission
+ */
+add_action( 'wp_ajax_nopriv_ene_elite_login', 'ene_elite_ajax_login' );
+function ene_elite_ajax_login() {
+    check_ajax_referer( 'ene_elite_ajax_nonce', 'nonce' );
+
+    $creds = array(
+        'user_login'    => sanitize_user( $_POST['log'] ?? '' ),
+        'user_password' => $_POST['pwd'] ?? '',
+        'remember'      => true
+    );
+
+    if ( empty( $creds['user_login'] ) || empty( $creds['user_password'] ) ) {
+        wp_send_json_error( [ 'message' => 'Username and Password are required.' ] );
+    }
+
+    $user = wp_signon( $creds, is_ssl() );
+
+    if ( is_wp_error( $user ) ) {
+        wp_send_json_error( [ 'message' => preg_replace('/<a href=".*?">.*?<\/a>/i', '', $user->get_error_message()) ] );
+    } else {
+        wp_set_current_user( $user->ID );
+        wp_send_json_success( [ 'message' => 'Success! Redirecting to Dashboard...' ] );
+    }
+}
+
+/**
  * Handle Add Student Submission
  */
 add_action( 'wp_ajax_ene_elite_add_student', 'ene_elite_ajax_add_student' );

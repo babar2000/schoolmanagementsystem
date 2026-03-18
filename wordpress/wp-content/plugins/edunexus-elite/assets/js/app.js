@@ -106,4 +106,36 @@ jQuery(document).ready(function($) {
         });
     }
 
+    // --- LOGIN FORM SUBMISSION ---
+    $('#ene-login-form').on('submit', function(e) {
+        e.preventDefault();
+        const $btn = $(this).find('button[type="submit"]');
+        const $msg = $('#login-message');
+        
+        $btn.text('Authenticating...').prop('disabled', true);
+        $msg.hide();
+        
+        const data = {
+            action: 'ene_elite_login',
+            nonce: eneEliteSettings.nonce,
+            log: $('input[name="log"]').val(),
+            pwd: $('input[name="pwd"]').val()
+        };
+        
+        $.post(eneEliteSettings.ajaxurl, data, function(response) {
+            if (response.success) {
+                $msg.css({background: 'rgba(43,231,150,0.15)', color: '#2BE796'}).html('✅ ' + response.data.message).fadeIn();
+                setTimeout(() => {
+                    window.location.href = eneEliteSettings.dashboard;
+                }, 1000);
+            } else {
+                $msg.css({background: 'rgba(244,63,94,0.15)', color: '#F43F5E'}).html('❌ ' + response.data.message).fadeIn();
+                $btn.text('Sign In').prop('disabled', false);
+            }
+        }).fail(function() {
+            $msg.css({background: 'rgba(244,63,94,0.15)', color: '#F43F5E'}).html('❌ A server error occurred.').fadeIn();
+            $btn.text('Sign In').prop('disabled', false);
+        });
+    });
+
 });

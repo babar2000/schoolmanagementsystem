@@ -27,6 +27,35 @@ $fees_url       = ene_get_page_url('fees');
 </head>
 <body class="ene-elite-app">
 
+    <?php if ( is_page('login') ) : ?>
+        <div class="ene-login-container">
+            <div class="ene-login-card">
+                <div class="ene-logo-center">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7E5BF2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <h2>EduNexus Pro</h2>
+                </div>
+                <p class="login-subtitle">Sign in to your account</p>
+                
+                <form id="ene-login-form">
+                    <div class="pe-form-group">
+                        <label>Username</label>
+                        <input type="text" name="log" required>
+                    </div>
+                    <div class="pe-form-group">
+                        <label>Password</label>
+                        <input type="password" name="pwd" required>
+                    </div>
+                    <div id="login-message" style="display:none; font-size: 13.5px; margin-bottom: 15px; text-align: center; border-radius: 6px; padding: 10px;"></div>
+                    <button type="submit" class="pe-btn-primary" style="width: 100%;">Sign In</button>
+                </form>
+                
+                <div class="login-footer">
+                    <small>Powered by EduNexus. Dedicated to Excellence.</small>
+                </div>
+            </div>
+        </div>
+    <?php else : ?>
+
     <div class="ene-wrapper">
         
         <!-- Sidebar Navigation -->
@@ -249,6 +278,8 @@ $fees_url       = ene_get_page_url('fees');
             </div>
         </main>
     </div>
+    
+    <?php endif; ?>
 
     <?php wp_footer(); ?>
 </body>

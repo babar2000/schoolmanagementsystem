@@ -392,3 +392,87 @@ a { text-decoration: none; color: inherit; }
     font-size: 13px;
     color: var(--text-secondary);
 }
+
+/* --- LOGIN SCREEN --- */
+.ene-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #1C2033 0%, var(--bg-main) 100%);
+}
+.ene-login-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.ene-logo-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+.ene-logo-center h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+.login-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+.login-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+.pe-form-group {
+    margin-bottom: 15px;
+}
+.pe-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+.pe-form-group input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+    transition: 0.3s;
+}
+.pe-form-group input:focus {
+    border-color: #7E5BF2;
+    background: rgba(0,0,0,0.3);
+}
+.pe-btn-primary {
+    background: #7E5BF2;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.pe-btn-primary:focus, .pe-btn-primary:hover {
+    background: #6D28D9;
+    box-shadow: 0 4px 12px rgba(126, 91, 242, 0.4);
+}
+.pe-btn-primary:disabled {
+    background: #4C1D95;
+    cursor: not-allowed;
+    box-shadow: none;
+}

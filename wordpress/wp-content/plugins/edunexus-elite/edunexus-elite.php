@@ -41,6 +41,7 @@ function ene_elite_create_app_pages() {
         'attendance' => [ 'title' => 'Attendance Management', 'content' => '[EduNexus_main_app]' ],
         'results'    => [ 'title' => 'Academic Results', 'content' => '[EduNexus_main_app]' ],
         'profile'    => [ 'title' => 'User Profile', 'content' => '[EduNexus_main_app]' ],
+        'login'      => [ 'title' => 'EduNexus Login', 'content' => '[EduNexus_main_app]' ],
     ];
 
     foreach ( $pages as $slug => $data ) {
@@ -70,9 +71,22 @@ function ene_elite_create_app_pages() {
 // Template Redirect to bypass theme for app pages
 add_action( 'template_redirect', 'ene_elite_load_app_shell' );
 function ene_elite_load_app_shell() {
-    $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile' ];
+    $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile', 'login' ];
     
     if ( is_page( $dashboard_pages ) ) {
+        
+        // Auth check: If attempting to access dashboard pages while logged out, redirect to login
+        if ( ! is_user_logged_in() && ! is_page( 'login' ) ) {
+            wp_safe_redirect( get_permalink( get_page_by_path( 'login' ) ) );
+            exit;
+        }
+
+        // Auth check: If accessing login while ALREADY logged in, redirect to dashboard
+        if ( is_user_logged_in() && is_page( 'login' ) ) {
+            wp_safe_redirect( get_permalink( get_page_by_path( 'dashboard' ) ) );
+            exit;
+        }
+
         $app_shell = EDUNEXUS_ELITE_DIR . 'templates/app-shell.php';
         if ( file_exists( $app_shell ) ) {
             include $app_shell;
@@ -103,7 +117,7 @@ function ene_elite_admin_menu_redirect() {
 // Enqueue scripts and styles
 add_action( 'wp_enqueue_scripts', 'ene_elite_enqueue_assets' );
 function ene_elite_enqueue_assets() {
-    $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile' ];
+    $dashboard_pages = [ 'dashboard', 'fees', 'attendance', 'results', 'profile', 'login' ];
     if ( is_page( $dashboard_pages ) ) {
         wp_enqueue_style( 'ene-elite-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap', array(), null );
         wp_enqueue_style( 'ene-elite-style', EDUNEXUS_ELITE_URL . 'assets/css/style.css', array(), EDUNEXUS_ELITE_VERSION );
@@ -111,8 +125,9 @@ function ene_elite_enqueue_assets() {
         wp_enqueue_script( 'ene-elite-script', EDUNEXUS_ELITE_URL . 'assets/js/app.js', array( 'jquery', 'chart-js' ), EDUNEXUS_ELITE_VERSION, true );
         
         wp_localize_script( 'ene-elite-script', 'eneEliteSettings', array(
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce( 'ene_elite_ajax_nonce' )
+            'ajaxurl'   => admin_url( 'admin-ajax.php' ),
+            'nonce'     => wp_create_nonce( 'ene_elite_ajax_nonce' ),
+            'dashboard' => get_permalink( get_page_by_path( 'dashboard' ) )
         ) );
     }
 }
